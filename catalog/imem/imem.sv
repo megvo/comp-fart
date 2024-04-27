@@ -32,7 +32,6 @@ module imem
   initial
     begin
       // read memory in hex format from file 
-      // $readmemh("program_exe",RAM);
       $readmemh("mult-prog_exe",RAM);
     end
 
