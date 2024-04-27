@@ -10,29 +10,44 @@
 // Revision: 1.0
 //
 //////////////////////////////////////////////////////////////////////////////////
-`ifndef TB_ADDER
-`define TB_ADDER
-
 `timescale 1ns/100ps
-`include "adder.sv"
 
 module tb_adder;
-    parameter n = 32;
-    logic [(n-1):0] a, b, y;
 
-   initial begin
-        $dumpfile("adder.vcd");
-        $dumpvars(0, uut);
-        $monitor("a = 0x%0h b = 0x%0h y = 0x%0h", a, b, y);
-    end
+    parameter WIDTH = 32;  
+    reg [WIDTH-1:0] A, B; 
+    reg Cin;               
+    wire [WIDTH-1:0] Sum;  
+    wire Cout;             
 
-    initial begin
-        a <= #n'hFFFFFFFF;
-        b <= #n'hFFFFFFFF;
-    end
-
-    adder uut(
-        .A(a), .B(b), .Y(y)
+    // UUT
+    adder #(.WIDTH(WIDTH)) uut(
+        .A(A), 
+        .B(B), 
+        .Cin(Cin), 
+        .Sum(Sum), 
+        .Cout(Cout)
     );
+
+    // Initialize testbench
+    initial begin
+        $dumpfile("tb_adder.vcd"); 
+        $dumpvars(0, uut);         
+        
+        // Apply random inputs
+        A = $random; B = $random; Cin = 0; #10;
+        A = $random; B = $random; Cin = 1; #10;
+        A = $random; B = $random; Cin = 0; #10;
+        A = $random; B = $random; Cin = 1; #10;
+
+        
+        $finish;
+    end
+
+    // Monitoring
+    initial begin
+        $monitor("Time = %0t: A = %b, B = %b, Cin = %b -> Sum = %b, Cout = %b",
+                  $time, A, B, Cin, Sum, Cout);
+    end
+
 endmodule
-`endif // TB_ADDER
