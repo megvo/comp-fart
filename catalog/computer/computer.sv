@@ -1,9 +1,9 @@
 //////////////////////////////////////////////////////////////////////////////////
 // The Cooper Union
 // ECE 251 Spring 2024
-// Engineer: Prof Rob Marano
+// Engineer: Megan Vo and Lamiah Khan
 // 
-//     Create Date: 2023-02-07
+//     Create Date: 2024-04-27
 //     Module Name: computer
 //     Description: 32-bit RISC
 //
@@ -36,7 +36,7 @@ module computer
     // computer internal components
 
     // the RISC CPU
-    cpu mips(clk, reset, pc, instr, memwrite, dataadr, writedata, readdata);
+    cpu ZanaX(clk, reset, pc, instr, memwrite, dataadr, writedata, readdata);
     // the instruction memory ("text segment") in main memory
     imem imem(pc[7:2], instr);
     // the data memory ("data segment") in main memory
