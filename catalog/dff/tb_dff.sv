@@ -1,9 +1,9 @@
 //////////////////////////////////////////////////////////////////////////////////
 // The Cooper Union
 // ECE 251 Spring 2024
-// Engineer: Prof Rob Marano
+// Engineer: Megan Vo and Lamiah Khan
 // 
-//     Create Date: 2023-02-07
+//     Create Date: 2024-04-27
 //     Module Name: tb_dff
 //     Description: Test bench for 32 bit D flip flop
 //
