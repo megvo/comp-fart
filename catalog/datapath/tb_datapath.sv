@@ -10,97 +10,88 @@
 // Revision: 1.0
 //
 //////////////////////////////////////////////////////////////////////////////////
-
+`ifndef TB_DATAPATH
+`define TB_DATAPATH
 `include "datapath.sv"
 `include "../clock/clock.sv"
 `include "../controller/controller.sv"
 `timescale 1ns/100ps
 
 module datapath_tb;
-    parameter n=32;
-    reg clk, reset, alusrc, pcsrc, regwrite;
-    reg [1:0] memtoreg, regdst, jump;
-    reg [2:0] alucontrol;
-    reg [(n-1):0] instr, readdata;
+    parameter n = 32;
+    reg clk, reset; 
+    reg alu_data, pc_data, regs_write;
+  reg [1:0] memoryReg, regsDestina, jump;
+  reg [(n-1):0] instruction, readdata;
+  reg [2:0] testAlu;
 
   // Define output signals
     wire [31:0] pc, aluout, writedata;
-    
-
-    logic [5:0] op, funct;
+    logic [5:0] opcode, functi;
     logic zero;
-
+    
     // Testbench Outputs
     logic memwrite;
-    //logic alusrc;
-    //logic regwrite;
-   // logic jump;
-   //logic [2:0] alucontrol;
-
-assign op=instr[31:26];
-assign funct=instr[5:0];
+    
+assign opcode = instruction[31:26];
+assign functi = instruction[5:0];
 
     datapath dut1 (
     .clk(clk),
     .reset(reset),
-    .memtoreg(memtoreg),
-    .pcsrc(pcsrc),
-    .alusrc(alusrc),
-    .regdst(regdst),
-    .regwrite(regwrite),
+    .memoryReg(memoryReg),
+    .pc_data(pc_data),
+    .alu_data(alu_data),
+    .regsDestina(regsDestina),
+    .regs_write(regs_write),
     .jump(jump),
-    .alucontrol(alucontrol),
+    .testAlu(testAlu),
     .zero(zero),
     .pc(pc),
-    .instr(instr),
+    .instruction(instruction),
     .aluout(aluout),
     .writedata(writedata),
     .readdata(readdata)
   );
 
     controller dut2 (
-        .op(op),
-        .funct(funct),
+        .opcode(opcode),
+        .functi(functi),
         .zero(zero1),
-        .memtoreg(memtoreg),
+        .memoryReg(memoryReg),
         .memwrite(memwrite),
-        .pcsrc(pcsrc),
-        .alusrc(alusrc),
-        .regdst(regdst),
-        .regwrite(regwrite),
+        .pc_data(pc_data),
+        .alu_data(alu_data),
+        .regsDestina(regsDestina),
+        .regs_write(regs_write),
         .jump(jump),
-        .alucontrol(alucontrol)
+        .testAlu(testAlu)
     );
 //   initial begin 
 //     $display("instr =%h zero =%h pc =%h alucontrol =%h aluout =%h writedata=%h", instr, zero, pc, alucontrol, aluout, writedata);
 //   end
 
-
 always #5 clk = ~clk;
-
 initial begin 
 clk=0;
 reset=1;
 #10;
 reset=0;
-//zero=0;
-instr = 32'h0C0D000F;  //addi $v1, $zero, 15
+//test for if zero = 0;
+instruction = 32'h0C0D000F;  
 #10;
-$display("instr =%h zero =%h pc =%h alucontrol =%h aluout =%h writedata=%h", instr, zero, pc, alucontrol, aluout, writedata);
-instr=  32'h0C0D000A;  //addi $v0, $zero, 10
+$display("instruction =%h zero =%h pc =%h testAlu =%h aluout =%h writedata=%h", instruction, zero, pc, testAlu, aluout, writedata);
+instruction=  32'h0C0D000A;  
 #10;
-$display("instr =%h zero =%h pc =%h alucontrol =%h aluout =%h writedata=%h ", instr, zero, pc, alucontrol, aluout, writedata);
-instr = 32'b00001001100000100000000000000100;  //store word  
+$display("instruction =%h zero =%h pc =%h testAlu =%h aluout =%h writedata=%h ", instruction, zero, pc, testAlu, aluout, writedata);
+instruction = 32'b00001001100000100000000000000100;  //stores word  
 #10
- $display("instr =%h zero =%h pc =%h alucontrol =%h aluout =%h writedata=%h memwrite=%h", instr, zero, pc, alucontrol, aluout, writedata, memwrite);
- instr= 32'b00000101100000110000000000000100;
- //instr= 32'b00001000010011000000000000000100;  //load word
+ $display("instruction =%h zero =%h pc =%h testAlu =%h aluout =%h writedata=%h memwrite=%h", instruction, zero, pc, testAlu, aluout, writedata, memwrite);
+ instruction= 32'b00000101100000110000000000000100;
+ //instr= 32'b00001000010011000000000000000100;  //loads word
  #10;
- $display("instr =%h zero =%h pc =%h alucontrol =%h aluout =%h writedata=%h memtoreg=%h", instr, zero, pc, alucontrol, aluout, writedata, memtoreg);
+ $display("instruction =%h zero =%h pc =%h testAlu =%h aluout =%h writedata=%h memoryReg=%h", instruction, zero, pc, testAlu, aluout, writedata, memoryReg);
 $finish;
 end
-
-
-
-
 endmodule
+`endif // TB_DATAPATH
