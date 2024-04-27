@@ -16,13 +16,13 @@
 
 `timescale 1ns/100ps
 
-`include "../regfile/regfile.sv"
-`include "../alu/alu.sv"
-`include "../dff/dff.sv"
-`include "../adder/adder.sv"
-`include "../sl2/sl2.sv"
-`include "../mux2/mux2.sv"
-`include "../signext/signext.sv"
+`include "regfile.sv"
+`include "alu.sv"
+`include "dff.sv"
+`include "adder.sv"
+`include "sl2.sv"
+`include "mux2.sv"
+`include "signext.sv"
 
 module datapath
     #(parameter n = 32)(
@@ -54,9 +54,9 @@ module datapath
 
     // "next PC" logic
     dff #(n)  pcreg(clk, reset, pcnext, pc);
-    adder       pcadd1(pc, 32'b100, pcplus4);
+  adder       pcadd1(.A(pc), .B(4), .Cin(1'b0), .Cout(Cout1), .Sum(pcplus4));
     sl2         immsh(signimm, signimmsh);
-    adder       pcadd2(pcplus4, signimmsh, pcbranch);
+  adder       pcadd2(.A(pcplus4), .B(signimmsh), .Cin(1'b0), .Cout(Cout2), .Sum(pcbranch));
     mux2 #(n)   pcbrmux(pcplus4, pcbranch, pcsrc, pcnextbr);
     mux4 #(n)   pcmux(pcnextbr, {pcplus4[31:28], instr[25:0], 2'b00}, readdata, 32'hxxxxxxxx, jump, pcnext);
 
