@@ -1,53 +1,54 @@
 //////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2024
-// Engineer: Megan Vo and Lamiah Khan
-// 
-//     Create Date: 2024-04-27
-//     Module Name: tb_adder
-//     Description: Test bench for simple behavorial adder
-//
-// Revision: 1.0
-//
+// The Cooper Union                                                             //
+// ECE 251 Spring 2024                                                          //
+// Engineers: Megan Vo and Lamiah Khan                                          //
+//                                                                              //
+//     Create Date: 2023-05-06                                                  //
+//     Module Name: adder                                                       //
+//     Description: Test bench for 32 bit adder.                                //
+//                                                                              //
+// Revision: 1.0                                                                //
+//                                                                              //
 //////////////////////////////////////////////////////////////////////////////////
+`ifndef TB_ADDER
+`define TB_ADDER
+
 `timescale 1ns/100ps
+`include "adder.sv"
 
-module tb_adder;
+module tb_adder
+	#(parameter n = 32);
+	reg [(n-1):0]x, y;
+	reg cin;
+  wire [(n-1):0] s;
+	wire cout;
 
-    parameter WIDTH = 32;  
-    reg [WIDTH-1:0] A, B; 
-    reg Cin;               
-    wire [WIDTH-1:0] Sum;  
-    wire Cout;             
+        adder uut (.A(x), .B(y), .Cin(cin), .Cout(cout), .Sum(s));
 
-    // UUT
-    adder #(.WIDTH(WIDTH)) uut(
-        .A(A), 
-        .B(B), 
-        .Cin(Cin), 
-        .Sum(Sum), 
-        .Cout(Cout)
-    );
+        initial
+        begin
+          $dumpfile("adder32Bit.vcd");
+					$dumpvars(0, uut);
+					$display("A\t\t\t\t\tB\t\t\t\t\tCin\tSum\t\t\t\t\tCout");
+          $monitor("%b\t%b\t%b\t%b\t%b", x, y, cin, s, cout);
+        end
 
-    // Initialize testbench
-    initial begin
-        $dumpfile("tb_adder.vcd"); 
-        $dumpvars(0, uut);         
-        
-        // Apply random inputs
-        A = $random; B = $random; Cin = 0; #10;
-        A = $random; B = $random; Cin = 1; #10;
-        A = $random; B = $random; Cin = 0; #10;
-        A = $random; B = $random; Cin = 1; #10;
+        initial
+        begin
 
-        
-        $finish;
-    end
+                x = #(n)'b11111111111111111111111111111111;
+                y = #(n)'b00000000000000000000000000000000;
+		cin = 1'b0;
+		
+		#10
+		x = #(n)'b00000000000000000000000000000000;
+		y = #(n)'b00000000000000000000000000000000;
+		cin = 1'b1;
 
-    // Monitoring
-    initial begin
-        $monitor("Time = %0t: A = %b, B = %b, Cin = %b -> Sum = %b, Cout = %b",
-                  $time, A, B, Cin, Sum, Cout);
-    end
-
-endmodule
+		#10
+		x = #(n)'b00000000000000000000000000000001;
+		y = #(n)'b00000000000000000000000000000011;
+		cin = 1'b1;
+        end
+endmodule // tb_adder
+`endif
