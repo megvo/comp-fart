@@ -1,9 +1,9 @@
 //////////////////////////////////////////////////////////////////////////////////
 // The Cooper Union
 // ECE 251 Spring 2024
-// Engineer: Prof Rob Marano
+// Engineer: Lamiah Khan and Megan Vo
 // 
-//     Create Date: 2023-02-07
+//     Create Date: 2024-04-27
 //     Module Name: imem
 //     Description: 32-bit RISC memory (instruction "text" segment)
 //
@@ -22,7 +22,7 @@ module imem
     // ---------------- PORT DEFINITIONS ----------------
     //
     input  logic [(r-1):0] addr,
-    output logic [(n-1):0] readdata
+    output logic [(n-1):0] read_dat
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
@@ -36,7 +36,7 @@ module imem
       $readmemh("mult-prog_exe",RAM);
     end
 
-  assign readdata = RAM[addr]; // word aligned
+  assign read_dat = RAM[addr]; // word aligned
 
 endmodule
 
