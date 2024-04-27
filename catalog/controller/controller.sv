@@ -1,13 +1,12 @@
 //////////////////////////////////////////////////////////////////////////////////
 // The Cooper Union
 // ECE 251 Spring 2024
-// Engineer: Prof Rob Marano
+// Engineer: Megan Vo and Lamiah Khan
 // 
-//     Create Date: 2023-02-07
+//     Create Date: 2024-04-27
 //     Module Name: controller
-//     Description: 32-bit RISC-based CPU controller (MIPS)
+//     Description: 32-bit RISC-based CPU controller
 //
-// Revision: 1.0
 //
 //////////////////////////////////////////////////////////////////////////////////
 `ifndef CONTROLLER
@@ -25,10 +24,12 @@ module controller
     //
     input  logic [5:0] op, funct,
     input  logic       zero,
-    output logic       memtoreg, memwrite,
+    output logic [1:0] memtoreg, 
+    output logic       memwrite,
     output logic       pcsrc, alusrc,
-    output logic       regdst, regwrite,
-    output logic       jump,
+    output logic [1:0] regdst, 
+    output logic       regwrite,
+    output logic [1:0] jump,
     output logic [2:0] alucontrol
 );
     //
@@ -38,9 +39,9 @@ module controller
     logic       branch;
     
     // CPU main decoder
-    maindec md(op, memtoreg, memwrite, branch, alusrc, regdst, regwrite, jump, aluop);
+    maindec md(op, memtoreg, memwrite, branch, alusrc, regdst, regwrite, jump, aluop, funct);
     // CPU's ALU decoder
-    aludec  ad(funct, aluop, alucontrol);
+    aludec ad(funct, aluop, alucontrol);
 
   assign pcsrc = branch & zero;
 
