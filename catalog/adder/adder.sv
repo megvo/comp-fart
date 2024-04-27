@@ -1,9 +1,9 @@
 //////////////////////////////////////////////////////////////////////////////////
 // The Cooper Union
 // ECE 251 Spring 2024
-// Engineer: YOUR NAMES
+// Engineer: Megan Vo and Lamiah Khan
 // 
-//     Create Date: 2023-02-07
+//     Create Date: 2024-04-27
 //     Module Name: adder
 //     Description: simple behavorial adder
 //
@@ -20,12 +20,13 @@ module adder
     //
     // ---------------- PORT DEFINITIONS ----------------
     //
-
+    input  logic [(n-1):0] A, B,
+    output logic [(n-1):0] Y
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
-
+    assign Y = A + B;
 endmodule
 
 `endif // ADDER
