@@ -1,9 +1,9 @@
 //////////////////////////////////////////////////////////////////////////////////
 // The Cooper Union
 // ECE 251 Spring 2024
-// Engineer: Prof Rob Marano
+// Engineer: Megan Vo and Lamiah Khan
 // 
-//     Create Date: 2023-02-07
+//     Create Date: 2024-04-27
 //     Module Name: cpu
 //     Description: 32-bit RISC-based CPU (MIPS)
 //
@@ -35,7 +35,8 @@ module cpu
     //
 
     // cpu internal components
-    logic       memtoreg, alusrc, regdst, regwrite, jump, pcsrc, zero;
+    logic       alusrc, regwrite, pcsrc, zero;
+    logic [1:0] memtoreg, regdst, jump;
     logic [2:0] alucontrol;
     
     controller c(instr[(31):26], instr[5:0], zero,
