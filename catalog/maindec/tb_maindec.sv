@@ -8,7 +8,8 @@
 // Description: Test bench for simple behavioral main decoder
 //
 // Revision: 1.0
-//
+// citation: https://www.ece.ucdavis.edu/~bbaas/281/notes/Handout.verilog6.pdf 
+//provided a lot of useful info about this decoder design! 
 ////////////////////////////////////////////////////////////////////////////////
 
 `ifndef TB_MAINDEC
@@ -36,13 +37,13 @@ wire [1:0] alu_operation;
 maindec #(32) dut (
     .opcode(opcode),
     .functi(functi),
-    .memory_to_register(memory_to_register),
-    .memory_write(memory_write),
     .branch(branch),
     .alu_source(alu_source),
-    .register_destination(register_destination),
+    .memory_to_register(memory_to_register),
     .register_write(register_write),
     .jump_instruction(jump_instruction),
+    .memory_write(memory_write),
+    .register_destination(register_destination),
     .alu_operation(alu_operation)
 );
 
@@ -50,57 +51,47 @@ maindec #(32) dut (
 initial begin
     $monitor("opcode=%b functi=%b memory_to_register=%b memory_write=%b branch=%b alu_source=%b register_destination=%b register_write=%b jump_instruction=%b alu_operation=%b",
              opcode, functi, memory_to_register, memory_write, branch, alu_source, register_destination, register_write, jump_instruction, alu_operation);
-
+//simulation starts!
     // Test case 1: R-type instruction (opcode = 000000, function = 000111)
     #10;
     opcode = 6'b000000;
     functi = 6'b000111;
-
     // Test case 2: LW instruction (opcode = 000001)
     #10;
     opcode = 6'b000001;
     functi = 6'bxxxxxx;
-
     // Test case 3: SW instruction (opcode = 000010)
     #10;
     opcode = 6'b000010;
     functi = 6'bxxxxxx;
-
     // Test case 4: ADDI instruction (opcode = 000011)
     #10;
     opcode = 6'b000011;
     functi = 6'bxxxxxx;
-
     // Test case 5: SUBI instruction (opcode = 000100)
     #10;
     opcode = 6'b000100;
     functi = 6'bxxxxxx;
-
     // Test case 6: BEQ instruction (opcode = 000101)
     #10;
     opcode = 6'b000101;
     functi = 6'bxxxxxx;
-
     // Test case 7: J instruction (opcode = 000111)
     #10;
     opcode = 6'b000111;
     functi = 6'bxxxxxx;
-
     // Test case 8: Jal instruction (opcode = 001000)
     #10;
     opcode = 6'b001000;
     functi = 6'bxxxxxx;
-
     // Test case 9: Illegal operation
     #10;
     opcode = 6'b101010;
     functi = 6'bxxxxxx;
-
     // Test case 10: Jr instruction (function = 001000)
     #10;
     opcode = 6'b000000;
     functi = 6'b000111;
-
     // Finish simulation
     #10;
     $finish;
