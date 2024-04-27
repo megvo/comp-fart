@@ -3,7 +3,7 @@
 // ECE 251 Spring 2024
 // Engineer: Megan Vo and Lamiah Khan
 // 
-//     Create Date: 2023-04-27
+//     Create Date: 2024-04-27
 //     Module Name: tb_adder
 //     Description: Test bench for simple behavorial adder
 //
