@@ -1,15 +1,16 @@
 //////////////////////////////////////////////////////////////////////////////////
 // The Cooper Union
 // ECE 251 Spring 2024
-// Engineer: Prof Rob Marano
+// Engineer: Megan Vo and Lamiah Khan
 // 
-//     Create Date: 2023-02-07
+//     Create Date: 2024-04-27
 //     Module Name: datapath
 //     Description: 32-bit RISC-based CPU datapath (MIPS)
 //
 // Revision: 1.0
 //
 //////////////////////////////////////////////////////////////////////////////////
+
 `ifndef DATAPATH
 `define DATAPATH
 
@@ -29,9 +30,12 @@ module datapath
     // ---------------- PORT DEFINITIONS ----------------
     //
     input  logic        clk, reset,
-    input  logic        memtoreg, pcsrc,
-    input  logic        alusrc, regdst,
-    input  logic        regwrite, jump,
+    input  logic [1:0]  memtoreg, 
+    input  logic        pcsrc,
+    input  logic        alusrc, 
+    input  logic [1:0]  regdst, 
+    input  logic        regwrite,
+    input  logic [1:0]  jump,
     input  logic [2:0]  alucontrol,
     output logic        zero,
     output logic [(n-1):0] pc,
@@ -49,17 +53,17 @@ module datapath
     logic [(n-1):0] result;
 
     // "next PC" logic
-    dff #(n)    pcreg(clk, reset, pcnext, pc);
+    dff #(n)  pcreg(clk, reset, pcnext, pc);
     adder       pcadd1(pc, 32'b100, pcplus4);
     sl2         immsh(signimm, signimmsh);
     adder       pcadd2(pcplus4, signimmsh, pcbranch);
     mux2 #(n)   pcbrmux(pcplus4, pcbranch, pcsrc, pcnextbr);
-    mux2 #(n)   pcmux(pcnextbr, {pcplus4[31:28], instr[25:0], 2'b00}, jump, pcnext);
+    mux4 #(n)   pcmux(pcnextbr, {pcplus4[31:28], instr[25:0], 2'b00}, readdata, 32'hxxxxxxxx, jump, pcnext);
 
     // register file logic
     regfile     rf(clk, regwrite, instr[25:21], instr[20:16], writereg, result, srca, writedata);
-    mux2 #(5)   wrmux(instr[20:16], instr[15:11], regdst, writereg);
-    mux2 #(n)   resmux(aluout, readdata, memtoreg, result);
+    mux4 #(5)   wrmux(instr[20:16], instr[15:11], 5'b01111, 5'bxxxxx, regdst, writereg);
+    mux4 #(n)   resmux(aluout, readdata, pcplus4, 32'hxxxxxxxx, memtoreg, result);
     signext     se(instr[15:0], signimm);
 
     // ALU logic
