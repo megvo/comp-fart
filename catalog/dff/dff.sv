@@ -1,15 +1,16 @@
 //////////////////////////////////////////////////////////////////////////////////
 // The Cooper Union
-// ECE 251 Spring 2024
-// Engineer: Prof Rob Marano
+// ECE 251 Spring 2023
+// Engineer: Megan Vo and Lamiah Khan
 // 
-//     Create Date: 2023-02-07
+//     Create Date: 2024-04-27
 //     Module Name: dff
 //     Description: 32 bit D flip flop
 //
 // Revision: 1.0
 //
 //////////////////////////////////////////////////////////////////////////////////
+
 `ifndef DFF
 `define DFF
 
