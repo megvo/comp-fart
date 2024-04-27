@@ -1,9 +1,9 @@
 //////////////////////////////////////////////////////////////////////////////////
 // The Cooper Union
 // ECE 251 Spring 2024
-// Engineer: Prof Rob Marano
+// Engineer: Lamiah Khan and Megan Vo
 // 
-//     Create Date: 2023-02-07
+//     Create Date: 2024-04-27
 //     Module Name: tb_imem
 //     Description: Test bench for instruction memory
 //
@@ -17,16 +17,16 @@
 `include "imem.sv"
 
 module tb_imem;
-    parameter n = 32; // bit length of registers/memory
-    parameter r = 6; // we are only addressing 64=2**6 mem slots in imem
-    logic [(n-1):0] readdata;
+    parameter n = 32; // this is the bit length of registers
+    parameter r = 6; // r = 6
+    logic [(n-1):0] read_dat;
     logic [(r-1):0] imem_addr;
 
    initial begin
         $dumpfile("imem.vcd");
         $dumpvars(0, uut);
         //$monitor("enable = %b clk = %b", enable, clk);
-        $monitor("time=%0t \t imem_addr=%b readdata=%h",$realtime, imem_addr, readdata);
+        $monitor("time=%0t \t imem_addr=%b read_dat=%h",$realtime, imem_addr, read_dat);
     end
 
     initial begin
@@ -38,7 +38,7 @@ module tb_imem;
 
    imem uut(
         .addr(imem_addr),
-        .readdata(readdata)
+        .read_dat(read_dat)
     );
 endmodule
 
