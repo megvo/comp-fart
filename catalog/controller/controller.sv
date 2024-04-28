@@ -1,13 +1,13 @@
 //////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2024
-// Engineer: Megan Vo and Lamiah Khan
-// 
-//     Create Date: 2024-04-27
-//     Module Name: controller
-//     Description: 32-bit RISC-based CPU controller
-//
-//
+// The Cooper Union                                                             // 
+// ECE 251 Spring 2024                                                          //
+// Engineer: Megan Vo and Lamiah Khan                                           //
+//                                                                              //
+//     Create Date: 2024-04-27                                                  //
+//     Module Name: controller                                                  //
+//     Description: 32-bit RISC-based CPU controller                            //
+//                                                                              //    
+//                                                                              //
 //////////////////////////////////////////////////////////////////////////////////
 `ifndef CONTROLLER
 `define CONTROLLER
