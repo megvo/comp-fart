@@ -11,54 +11,51 @@
 //                                                                              //
 //////////////////////////////////////////////////////////////////////////////////
 
-`ifndef ADDER
-`define ADDER
+`ifndef CUSTOM_ADDER
+`define CUSTOM_ADDER
 
-module adder #(
-    parameter WIDTH = 32  // Parameter for the width of the adder
+module custom_adder #(
+    parameter SIZE = 32 
 )(
-    input [WIDTH-1:0] A,
-    input [WIDTH-1:0] B,
+    input [SIZE-1:0] A,
+    input [SIZE-1:0] B,
     input Cin,
-    output [WIDTH-1:0] Sum,
+    output [SIZE-1:0] Result,
     output Cout
 );
 
-    // Carry wire
-    wire [WIDTH-1:0] carry;
+  
+    wire [SIZE-1:0] carry;
 
-    // LSB Adder
-    full_adder fa0 (
+   
+    full_adder_custom fa0 (
         .A(A[0]),
         .B(B[0]),
         .Cin(Cin),
-        .Sum(Sum[0]),
+        .Sum(Result[0]),
         .Cout(carry[0])
     );
 
-    // Need more adders for the rest of bits required (7)
-    genvar i;
+    genvar idx;
     generate
-        for (i = 1; i < WIDTH; i = i + 1) begin : full_adder_loop
-            full_adder fa (
-                .A(A[i]),
-                .B(B[i]),
-                .Cin(carry[i-1]),
-                .Sum(Sum[i]),
-                .Cout(carry[i])
+        for (idx = 1; idx < SIZE; idx = idx + 1) begin : full_adder_loop
+            full_adder_custom fa (
+                .A(A[idx]),
+                .B(B[idx]),
+                .Cin(carry[idx-1]),
+                .Sum(Result[idx]),
+                .Cout(carry[idx])
             );
         end
     endgenerate
 
-    // Carry out is from MSB
-    assign Cout = carry[WIDTH-1];
+    assign Cout = carry[SIZE-1];
 
 endmodule
 
-`endif // ADDER
+`endif
 
-// One-bit full adder logic
-module full_adder(
+module full_adder_custom(
     input A,
     input B,
     input Cin,
@@ -68,4 +65,3 @@ module full_adder(
     assign Sum = A ^ B ^ Cin;
     assign Cout = (A & B) | (A & Cin) | (B & Cin);
 endmodule
-
