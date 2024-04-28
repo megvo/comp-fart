@@ -22,20 +22,20 @@ module imem
     // ---------------- PORT DEFINITIONS ----------------
     //
     input  logic [(r-1):0] addr,
-    output logic [(n-1):0] read_dat
+    output logic [(n-1):0] readdata
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
-    logic [(n-1):0] RAM[0:(2**r-1)];
+    logic [(n-1):0] RAM[0:(2**r-1)];   //64 lines because 5 bit
 
   initial
     begin
       // read memory in hex format from file 
-      $readmemh("mips-simple_exe",RAM);
+      $readmemh("fib1.txt",RAM);
     end
 
-  assign read_dat = RAM[addr]; // word aligned
+  assign readdata = RAM[addr]; // word aligned
 
 endmodule
 
