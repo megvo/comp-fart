@@ -32,7 +32,7 @@ module imem
   initial
     begin
       // read memory in hex format from file 
-      $readmemh("fib1.txt",RAM);
+        $readmemh("mips-simple_exe.txt",RAM);
     end
 
   assign readdata = RAM[addr]; // word aligned
