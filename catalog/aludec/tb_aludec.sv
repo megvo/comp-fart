@@ -4,8 +4,8 @@
 // Engineers: Megan Vo and Lamiah Khan                                          //
 //                                                                              //
 //     Create Date: 2024-04-27                                                  //
-//     Module Name: adder                                                       //
-//     Description: 32 bit adder                                                //
+//     Module Name: tb_aludec                                                   //
+//     Description: Testbench for aludec                                        //
 //                                                                              //
 //                                                                              //
 //                                                                              //
