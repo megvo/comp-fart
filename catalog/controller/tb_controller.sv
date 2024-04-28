@@ -1,9 +1,15 @@
-// The Cooper Union
-// ECE 251 Spring 2024
-// Engineer: Megan Vo and Lamiah Khan
-// 
-//     Create Date: 2024-04-27
-
+//////////////////////////////////////////////////////////////////////////////////
+// The Cooper Union                                                             //
+// ECE 251 Spring 2024                                                          //
+// Engineer: Megan Vo and Lamiah Khan                                           //
+//                                                                              //
+//     Create Date: 2024-04-27                                                  //   
+//     Module Name: tb_controller                                               //
+//     Description: Test bench for a single-cycle MIPS computer                 // 
+//                                                                              //
+//                                                                              //  
+//                                                                              //
+//////////////////////////////////////////////////////////////////////////////////
 `timescale 1ns/100ps
 `include "controller.sv"
 
