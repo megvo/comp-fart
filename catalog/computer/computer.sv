@@ -1,14 +1,14 @@
 //////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2024
-// Engineer: Megan Vo and Lamiah Khan
-// 
-//     Create Date: 2024-04-27
-//     Module Name: computer
-//     Description: 32-bit RISC
-//
-// Revision: 1.0
-//
+// The Cooper Union                                                             //
+// ECE 251 Spring 2024                                                          //
+// Engineer: Megan Vo and Lamiah Khan                                           //
+//                                                                              //
+//     Create Date: 2024-04-27                                                  //                                                   
+//     Module Name: computer                                                    // 
+//     Description: 32-bit RISC                                                 //
+//                                                                              //
+//                                                                              //
+//                                                                              // 
 //////////////////////////////////////////////////////////////////////////////////
 `ifndef COMPUTER
 `define COMPUTER
