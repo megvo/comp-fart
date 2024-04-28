@@ -4,8 +4,8 @@
 // Engineers: Megan Vo and Lamiah Khan                                          //
 //                                                                              //
 //     Create Date: 2024-04-28                                                  //
-//     Module Name: tb_adder                                              //
-//     Description: Test bench for 32 bit adder.                         //
+//     Module Name: tb_adder                                                    //
+//     Description: Test bench for 32 bit adder.                                //
 //                                                                              //
 // Revision: 1.0                                                                //
 //                                                                              //
