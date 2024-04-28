@@ -1,9 +1,15 @@
-// The Cooper Union
-// ECE 251 Spring 2024
-// Engineer: Megan Vo and Lamiah Khan
-// 
-//     Create Date: 2024-04-27
-
+//////////////////////////////////////////////////////////////////////////////////
+// The Cooper Union                                                             //
+// ECE 251 Spring 2024                                                          //
+// Engineers: Megan Vo and Lamiah Khan                                          //
+//                                                                              //
+//     Create Date: 2024-04-27                                                  //
+//     Module Name: adder                                                       //
+//     Description: 32 bit adder                                                //
+//                                                                              //
+//                                                                              //
+//                                                                              //
+//////////////////////////////////////////////////////////////////////////////////
 `timescale 1ns/100ps
 
 module aludec_tb;
