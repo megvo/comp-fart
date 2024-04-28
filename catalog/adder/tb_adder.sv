@@ -3,38 +3,37 @@
 // ECE 251 Spring 2024                                                          //
 // Engineers: Megan Vo and Lamiah Khan                                          //
 //                                                                              //
-//     Create Date: 2023-05-06                                                  //
-//     Module Name: adder                                                       //
-//     Description: Test bench for 32 bit adder.                                //
+//     Create Date: 2024-04-28                                                  //
+//     Module Name: tb_custom_adder                                              //
+//     Description: Test bench for 32 bit custom_adder.                         //
 //                                                                              //
 // Revision: 1.0                                                                //
 //                                                                              //
 //////////////////////////////////////////////////////////////////////////////////
 `timescale 1ns/100ps
 
-module tb_adder;
+module tb_custom_adder;
 
-    parameter WIDTH = 32;  // Parameter for the width of the adder
-    reg [WIDTH-1:0] A, B;  // Inputs are reg for the testbench
-    reg Cin;               // Carry-in for the testbench
-    wire [WIDTH-1:0] Sum;  // Output Sum is wire for the testbench
-    wire Cout;             // Carry-out for the testbench
+    parameter SIZE = 32;  
+    reg [SIZE-1:0] A, B;  
+    reg Cin;              
+    wire [SIZE-1:0] Result; 
+    wire Cout;            
 
-    // UUT
-    adder #(.WIDTH(WIDTH)) uut(
+    custom_adder #(.SIZE(SIZE)) uut(
         .A(A), 
         .B(B), 
         .Cin(Cin), 
-        .Sum(Sum), 
+        .Result(Result), 
         .Cout(Cout)
     );
 
     // Initialize testbench
     initial begin
-        $dumpfile("tb_adder.vcd"); 
+        $dumpfile("tb_custom_adder.vcd"); 
         $dumpvars(0, uut);         
         
-        // Apply random inputs
+        
         A = $random; B = $random; Cin = 0; #10;
         A = $random; B = $random; Cin = 1; #10;
         A = $random; B = $random; Cin = 0; #10;
@@ -44,10 +43,10 @@ module tb_adder;
         $finish;
     end
 
-    // Monitoring
+    
     initial begin
-        $monitor("Time = %0t: A = %b, B = %b, Cin = %b -> Sum = %b, Cout = %b",
-                  $time, A, B, Cin, Sum, Cout);
+        $monitor("Time = %0t: A = %b, B = %b, Cin = %b -> Result = %b, Cout = %b",
+                  $time, A, B, Cin, Result, Cout);
     end
 
 endmodule
