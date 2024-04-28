@@ -4,15 +4,15 @@
 // Engineers: Megan Vo and Lamiah Khan                                          //
 //                                                                              //
 //     Create Date: 2024-04-28                                                  //
-//     Module Name: tb_custom_adder                                              //
-//     Description: Test bench for 32 bit custom_adder.                         //
+//     Module Name: tb_adder                                              //
+//     Description: Test bench for 32 bit adder.                         //
 //                                                                              //
 // Revision: 1.0                                                                //
 //                                                                              //
 //////////////////////////////////////////////////////////////////////////////////
 `timescale 1ns/100ps
 
-module tb_custom_adder;
+module tb_adder;
 
     parameter SIZE = 32;  
     reg [SIZE-1:0] A, B;  
