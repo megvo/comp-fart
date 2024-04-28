@@ -11,57 +11,23 @@
 //                                                                              //
 //////////////////////////////////////////////////////////////////////////////////
 
-`ifndef CUSTOM_ADDER
-`define CUSTOM_ADDER
+`ifndef ADDER
+`define ADDER
 
-module custom_adder #(
-    parameter SIZE = 32 
-)(
-    input [SIZE-1:0] A,
-    input [SIZE-1:0] B,
-    input Cin,
-    output [SIZE-1:0] Result,
-    output Cout
+`timescale 1ns/100ps
+
+module adder
+    #(parameter n = 32)(
+    //
+    // ---------------- PORT DEFINITIONS ----------------
+    //
+    input  logic [(n-1):0] A, B,
+    output logic [(n-1):0] Y
 );
-
-  
-    wire [SIZE-1:0] carry;
-
-   
-    full_adder_custom fa0 (
-        .A(A[0]),
-        .B(B[0]),
-        .Cin(Cin),
-        .Sum(Result[0]),
-        .Cout(carry[0])
-    );
-
-    genvar idx;
-    generate
-        for (idx = 1; idx < SIZE; idx = idx + 1) begin : full_adder_loop
-            full_adder_custom fa (
-                .A(A[idx]),
-                .B(B[idx]),
-                .Cin(carry[idx-1]),
-                .Sum(Result[idx]),
-                .Cout(carry[idx])
-            );
-        end
-    endgenerate
-
-    assign Cout = carry[SIZE-1];
-
+    //
+    // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
+    //
+    assign Y = A + B;
 endmodule
 
-`endif
-
-module full_adder_custom(
-    input A,
-    input B,
-    input Cin,
-    output Sum,
-    output Cout
-);
-    assign Sum = A ^ B ^ Cin;
-    assign Cout = (A & B) | (A & Cin) | (B & Cin);
-endmodule
+`endif // ADDER
