@@ -8,11 +8,9 @@
 `include "controller.sv"
 
 module controller_tb;
-    // Testbench Inputs
     reg [5:0] op, funct;
     reg zero;
 
-    // Testbench Outputs
     wire memwrite;
     wire pcsrc, alusrc;
     wire regwrite;
@@ -33,19 +31,13 @@ module controller_tb;
         .jump(jump),
         .alucontrol(alucontrol)
     );
-
-    // Testbench Procedure
+    
     initial begin
-        // Initialize inputs
         op = 6'b000000;
         funct = 6'b000000;
         zero = 0;
 
-        // Wait for a few clock cycles
-        //#10;
-
-        // Test scenario
-        // Assign values to op, funct, and zero inputs to test different cases
+        #10;
 
         // Case 1: Test case description
         op = 6'b001000;
@@ -60,6 +52,8 @@ module controller_tb;
         $display("memtoreg = %b", memtoreg);
         $display("jump = %b", jump);
         $display("alucontrol = %b", alucontrol);
+
+        // Case 2: Test case description
         op = 6'b000000;
         funct = 6'b000100;
         zero= 1;
@@ -72,18 +66,7 @@ module controller_tb;
         $display("memtoreg = %b", memtoreg);
         $display("jump = %b", jump);
         $display("alucontrol = %b", alucontrol);
-        
-        //$display("aluop = %b", alucontrol);
-        
-        // Case 2: Test case description
-        // op = 6'b001000;
-        // funct = 6'b000000;
-        // zero = 0;
-
-        // ...
-
-        // End simulation
-        #100 ;
-        //$finish;
+    
+        #100 $finish;
     end
 endmodule
