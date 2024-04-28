@@ -14,25 +14,58 @@
 `ifndef ADDER
 `define ADDER
 
-`include "../FullAdder/fullAdder.sv"
-`timescale 1ns/100ps
+module adder #(
+    parameter WIDTH = 32  // Parameter for the width of the adder
+)(
+    input [WIDTH-1:0] A,
+    input [WIDTH-1:0] B,
+    input Cin,
+    output [WIDTH-1:0] Sum,
+    output Cout
+);
 
-module adder
-	#(parameter n = 32)(	
-	input [(n-1):0]A, B,
-	input Cin,
-	output Cout,
-	output [(n-1):0] Sum);
-	wire [(n-1):0] carries;
-	assign carries[0] = Cin;
-	
-	genvar i;
-	generate for(i = 0; i < (n-1); i = i + 1)
-		begin
-			fullAdder bits(.In1(A[i]), .In2(B[i]), .Cin(carries[i]), .Sum(Sum[i]), .Cout(carries[i+1]));
-		end
-	endgenerate
-	fullAdder bit31(.In1(A[(n-1)]), .In2(B[(n-1)]), .Cin(carries[(n-1)]), .Sum(Sum[(n-1)]), .Cout(Cout));
+    // Carry wire
+    wire [WIDTH-1:0] carry;
 
-endmodule // Adder
-`endif
+    // LSB Adder
+    full_adder fa0 (
+        .A(A[0]),
+        .B(B[0]),
+        .Cin(Cin),
+        .Sum(Sum[0]),
+        .Cout(carry[0])
+    );
+
+    // Need more adders for the rest of bits required (7)
+    genvar i;
+    generate
+        for (i = 1; i < WIDTH; i = i + 1) begin : full_adder_loop
+            full_adder fa (
+                .A(A[i]),
+                .B(B[i]),
+                .Cin(carry[i-1]),
+                .Sum(Sum[i]),
+                .Cout(carry[i])
+            );
+        end
+    endgenerate
+
+    // Carry out is from MSB
+    assign Cout = carry[WIDTH-1];
+
+endmodule
+
+`endif // ADDER
+
+// One-bit full adder logic
+module full_adder(
+    input A,
+    input B,
+    input Cin,
+    output Sum,
+    output Cout
+);
+    assign Sum = A ^ B ^ Cin;
+    assign Cout = (A & B) | (A & Cin) | (B & Cin);
+endmodule
+
