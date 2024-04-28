@@ -20,7 +20,7 @@ module tb_clock;
     wire clk;
     logic enable;
 
-   initial begin
+    initial begin
         $dumpfile("clock.vcd");
         $dumpvars(0, uut);
         //$monitor("enable = %b clk = %b", enable, clk);
@@ -28,16 +28,17 @@ module tb_clock;
     end
 
     initial begin
-        enable <= 0;
-        #10 enable <= 1;
-        #100 enable <= 0;
+        enable = 0;
+        #10 enable = 1;
+        #100 enable = 0;
         $finish;
     end
 
-   clock uut(
+    custom_clock uut(
         .ENABLE(enable),
         .CLOCK(clk)
     );
 endmodule
 
 `endif // TB_CLOCK
+
