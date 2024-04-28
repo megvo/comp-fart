@@ -1,15 +1,16 @@
 //////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2024
-// Engineer: Megan Vo and Lamiah Khan
-// 
-//     Create Date: 2024-04-27
-//     Module Name: aludec
-//     Description: 32-bit RISC ALU decoder
-//
-// Revision: 1.0
-//
+// The Cooper Union                                                             //
+// ECE 251 Spring 2024                                                          //
+// Engineers: Megan Vo and Lamiah Khan                                          //
+//                                                                              //
+//     Create Date: 2024-04-27                                                  //
+//     Module Name: adder                                                       //
+//     Description: 32 bit adder                                                //
+//                                                                              //
+//                                                                              //
+//                                                                              //
 //////////////////////////////////////////////////////////////////////////////////
+
 `ifndef ALUDEC
 `define ALUDEC
 
