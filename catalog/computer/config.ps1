@@ -5,7 +5,7 @@
  # Note: icarus verilog and gtkwave must be installed
  #>
 
- $COMPONENT = "clock"
+ $COMPONENT = "computer"
  #
  $SRC = "$COMPONENT.sv"
  $TESTBENCH = "tb_$COMPONENT.sv"
