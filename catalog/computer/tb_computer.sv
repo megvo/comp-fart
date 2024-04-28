@@ -1,14 +1,14 @@
 //////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2024
-// Engineer: Megan Vo and Lamiah Khan
-// 
-//     Create Date: 2024-04-27
-//     Module Name: tb_computer
-//     Description: Test bench for a single-cycle MIPS computer
-//
-// Revision: 1.0
-//
+// The Cooper Union                                                             //
+// ECE 251 Spring 2024                                                          //
+// Engineer: Megan Vo and Lamiah Khan                                           //
+//                                                                              //
+//     Create Date: 2024-04-27                                                  //   
+//     Module Name: tb_computer                                                 //
+//     Description: Test bench for a single-cycle MIPS computer                 // 
+//                                                                              //
+//                                                                              //  
+//                                                                              //
 //////////////////////////////////////////////////////////////////////////////////
 `ifndef TB_COMPUTER
 `define TB_COMPUTER
