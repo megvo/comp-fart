@@ -1,4 +1,4 @@
-#
+ #
  # File: 	clean.ps1
  # Author: 	Prof. Rob Marano
  # Build and test file for Verilog on Windows using PowerShell
