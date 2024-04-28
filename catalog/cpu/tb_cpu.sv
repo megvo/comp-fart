@@ -1,3 +1,15 @@
+//////////////////////////////////////////////////////////////////////////////////
+// The Cooper Union                                                             //  
+// ECE 251 Spring 2024                                                          //
+// Engineer: Megan Vo and Lamiah Khan                                           //
+//                                                                              //
+//     Create Date: 2024-04-27                                                  //
+//     Module Name: tb_cpu                                                         //
+//     Description: Testbench for a 32-bit RISC-based CPU (MIPS)                //
+//                                                                              //
+//                                                                              //
+//                                                                              //
+//////////////////////////////////////////////////////////////////////////////////
 `timescale 1ns/100ps
 
 module tb_cpu;
