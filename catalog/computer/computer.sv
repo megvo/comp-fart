@@ -36,7 +36,7 @@ module computer
     // computer internal components
 
     // the RISC CPU
-    cpu ZanaX(clk, reset, pc, instr, memwrite, dataadr, writedata, readdata);
+    cpu comp_fart(clk, reset, pc, instr, memwrite, dataadr, writedata, readdata);
     // the instruction memory ("text segment") in main memory
     imem imem(pc[7:2], instr);
     // the data memory ("data segment") in main memory
