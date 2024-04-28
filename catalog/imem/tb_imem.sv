@@ -17,16 +17,16 @@
 `include "imem.sv"
 
 module tb_imem;
-    parameter n = 32; // this is the bit length of registers
-    parameter r = 6; // r = 6
-    logic [(n-1):0] read_dat;
+    parameter n = 32; // bit length of registers/memory
+    parameter r = 6; // we are only addressing 64=2**6 mem slots in imem
+    logic [(n-1):0] readdata;
     logic [(r-1):0] imem_addr;
 
    initial begin
         $dumpfile("imem.vcd");
         $dumpvars(0, uut);
         //$monitor("enable = %b clk = %b", enable, clk);
-        $monitor("time=%0t \t imem_addr=%b read_dat=%h",$realtime, imem_addr, read_dat);
+        $monitor("time=%0t \t imem_addr=%b readdata=%h",$realtime, imem_addr, readdata);
     end
 
     initial begin
@@ -38,7 +38,7 @@ module tb_imem;
 
    imem uut(
         .addr(imem_addr),
-        .read_dat(read_dat)
+        .readdata(readdata)
     );
 endmodule
 
