@@ -15,39 +15,40 @@
 
 `timescale 1ns/100ps
 
-module aludec
-    #(parameter n = 32)(
+module aludec #(
+    parameter n = 32
+)(
     //
-    // ---------------- PORT DEFINITIONS ----------------
+    // --------------- PORT DEFINITIONS ---------------
     //
     input  logic [5:0] funct,
     input  logic [1:0] aluop,
-    output logic [2:0] alucontrol);
+    output logic [2:0] alucontrol
+);
     //
-    // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
+    // --------------- MODULE DESIGN IMPLEMENTATION ---------------
     //
-    always @*
-    begin
-        case(aluop)
-        2'b00: alucontrol <= 3'b010;  // add (for lw/sw/addi)
-        2'b01: alucontrol <= 3'b110;  // beq
-        2'b11: alucontrol <= 3'b101;  // bne
-        default:
-            // for R-type instructions
-            case(funct)
-                6'b000011: alucontrol <= 3'b010; // add, 3
-                6'b000100: alucontrol <= 3'b110; // sub, 4
-                6'b000000: alucontrol <= 3'b000; // and, 0
-                6'b000001: alucontrol <= 3'b001; // or, 1
-                6'b001100: alucontrol <= 3'b111; // slt, 6
-                6'b001001: alucontrol <= 3'b011; // mult, 5
-                6'b000010: alucontrol <= 3'b100; // nor, 2
-                //6'b010000: alucontrol <= 3'b101; // mfhi
-                default:   alucontrol <= 3'bxxx; // ???
-            endcase
+    always @* begin
+        case (aluop)
+            2'b00: alucontrol <= 3'b010;  // Operation for lw/sw/addi
+            2'b01: alucontrol <= 3'b110;  // Operation for beq
+            2'b11: alucontrol <= 3'b101;  // Operation for bne
+            default: begin
+                // R-type instruction operations
+                case (funct)
+                    6'b000011: alucontrol <= 3'b010;  // Operation for add
+                    6'b000100: alucontrol <= 3'b110;  // Operation for sub
+                    6'b000000: alucontrol <= 3'b000;  // Operation for and
+                    6'b000001: alucontrol <= 3'b001;  // Operation for or
+                    6'b001100: alucontrol <= 3'b111;  // Operation for slt
+                    6'b001001: alucontrol <= 3'b011;  // Operation for mult
+                    6'b000010: alucontrol <= 3'b100;  // Operation for nor
+                    default: alucontrol <= 3'bxxx;  // Unspecified operation
+                endcase
+            end
         endcase
     end
 
 endmodule
 
-`endif // ALUDEC
+`endif // CUSTOM_ALUDEC
