@@ -1,14 +1,14 @@
 //////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2024
-// Engineer: Megan Vo and Lamiah Khan
-// 
-//     Create Date: 2024-04-27
-//     Module Name: tb_clock
-//     Description: Test bench for clock generator
-//
-// Revision: 1.0
-//
+// The Cooper Union                                                             //
+// ECE 251 Spring 2024                                                          //
+// Engineer: Megan Vo and Lamiah Khan                                           //
+//                                                                              //
+//     Create Date: 2024-04-27                                                  //
+//     Module Name: tb_clock                                                    //
+//     Description: Test bench for clock generator                              //  
+//                                                                              //
+//                                                                              //
+//                                                                              //
 //////////////////////////////////////////////////////////////////////////////////
 `ifndef TB_CLOCK
 `define TB_CLOCK
