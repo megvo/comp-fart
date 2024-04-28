@@ -5,7 +5,7 @@
  # Note: icarus verilog and gtkwave must be installed
  #>
 
- $COMPONENT = "controller"
+ $COMPONENT = "cpu"
  #
  $SRC = "$COMPONENT.sv"
  $TESTBENCH = "tb_$COMPONENT.sv"
