@@ -181,6 +181,7 @@ module tb_computer;
     begin
         $display("Program test 2 unsuccessful");
         #10;
+       $finish;
     end
     
   end
