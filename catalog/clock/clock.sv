@@ -1,14 +1,14 @@
 //////////////////////////////////////////////////////////////////////////////////
-// The Cooper Union
-// ECE 251 Spring 2024
-// Engineer: Megan Vo and Lamiah Khan
-// 
-//     Create Date: 2024-04-27
-//     Module Name: clock
-//     Description: Clock generator; duty cycle = 50%
-//
-// Revision: 1.0
-//
+// The Cooper Union                                                             //    
+// ECE 251 Spring 2024                                                          //
+// Engineer: Megan Vo and Lamiah Khan                                           //
+//                                                                              // 
+//     Create Date: 2024-04-27                                                  // 
+//     Module Name: clock                                                       //
+//     Description: Clock generator; duty cycle = 50%                           //
+//                                                                              //
+//                                                                              // 
+//                                                                              //
 //////////////////////////////////////////////////////////////////////////////////
 `ifndef CLOCK
 `define CLOCK
