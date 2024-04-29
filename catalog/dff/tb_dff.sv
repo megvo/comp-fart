@@ -14,7 +14,7 @@
 `define TB_DFF
 
 `timescale 1ns/100ps
-`include "dff.sv"
+`include "../dff/dff.sv"
 `include "../clock/clock.sv"
 
 module tb_dff;
