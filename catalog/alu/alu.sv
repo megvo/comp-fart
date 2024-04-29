@@ -37,7 +37,7 @@ module alu #(
             HiLo = 64'b0;
         end
 
-    always @(a, b, alucontrol) begin
+    always @(a or b or alucontrol) begin
         case (alucontrol)
             3'b000: result = a & b;
             3'b001: result = a | b;
