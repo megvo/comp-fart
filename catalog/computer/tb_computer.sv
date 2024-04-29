@@ -15,7 +15,7 @@
 
 `timescale 1ns/100ps
 
-`include "computer.sv"
+`include "../computer/computer.sv"
 `include "../clock/clock.sv"
 
 module tb_computer;
@@ -129,7 +129,7 @@ module tb_computer;
       , dut.compfart.c.md.regdst, dut.compfart.c.md.regwrite, dut.compfart.c.md.jump );
     $display("writedata %h dataadr %h memwrite %h", writedata, dataadr, memwrite);
 
-    if (dut.dmem.RAM[1] === 32'h0C0C000A)
+     if (dut.dmem.RAM[1] === 32'h0C0C000A)
       begin
         $display("Successfully wrote 0x%4h at RAM[%3d]",1,32'h0C0C000A);
         firstTest = 1'b1;
