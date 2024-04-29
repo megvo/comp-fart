@@ -14,7 +14,7 @@
 `define TB_REGFILE
 
 `timescale 1ns/100ps
-`include "regfile.sv"
+`include "../regfile/regfile.sv"
 
 module tb_regfile;
     parameter n = 32;
