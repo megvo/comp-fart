@@ -14,7 +14,7 @@
 `define TB_SL2
 
 `timescale 1ns/100ps
-`include "sl2.sv"
+`include "../sl2/sl2.sv"
 
 module tb_sl2;
     parameter n = 32;
