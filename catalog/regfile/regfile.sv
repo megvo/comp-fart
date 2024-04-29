@@ -30,7 +30,7 @@ module regfile
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
-    logic [(31):0] rf[(31):0];
+    logic [(n-1):0] rf[(2**5-1):0];
 
     // three ported register file
     // read two ports combinationally
