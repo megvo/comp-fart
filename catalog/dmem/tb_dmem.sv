@@ -14,7 +14,7 @@
 `define TB_DMEM
 
 `timescale 1ns/100ps
-`include "dmem.sv"
+`include "../dmem/dmem.sv"
 `include "../clock/clock.sv"
 
 module tb_dmem;
