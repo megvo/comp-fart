@@ -14,7 +14,7 @@
 `define TB_IMEM
 
 `timescale 1ns/100ps
-`include "imem.sv"
+`include "../imem/imem.sv"
 
 module tb_imem;
     parameter n = 32; // bit length of registers/memory
