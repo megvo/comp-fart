@@ -12,7 +12,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 `ifndef TB_DATAPATH
 `define TB_DATAPATH
-`include "datapath.sv"
+`include "../datapath/datapath.sv"
 `include "../clock/clock.sv"
 `include "../controller/controller.sv"
 `timescale 1ns/100ps
