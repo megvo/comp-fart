@@ -14,7 +14,7 @@
 `define TB_CLOCK
 
 `timescale 1ns/100ps
-`include "clock.sv"
+`include "../clock/clock.sv"
 
 module tb_clock;
     wire clk;
