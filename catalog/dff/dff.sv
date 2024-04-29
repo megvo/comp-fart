@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////
 // The Cooper Union
-// ECE 251 Spring 2023
+// ECE 251 Spring 2024
 // Engineer: Megan Vo and Lamiah Khan
 // 
 //     Create Date: 2024-04-27
