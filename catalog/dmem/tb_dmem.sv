@@ -1,65 +1,42 @@
 //////////////////////////////////////////////////////////////////////////////////
 // The Cooper Union
 // ECE 251 Spring 2024
-// Engineer: Prof Rob Marano
+// Engineer: Lamiah Khan and Megan Vo
 // 
-//     Create Date: 2023-02-07
-//     Module Name: tb_dmem
-//     Description: Test bench for data memory
+//     Create Date: 2024-04-27
+//     Module Name: imem
+//     Description: 32-bit RISC memory (instruction "text" segment)
 //
 // Revision: 1.0
 //
 //////////////////////////////////////////////////////////////////////////////////
-`ifndef TB_DMEM
-`define TB_DMEM
+`ifndef IMEM
+`define IMEM
 
 `timescale 1ns/100ps
-`include "../dmem/dmem.sv"
-`include "../clock/clock.sv"
 
-module tb_dmem;
-    parameter n = 32; // bit length of registers/memory
-    parameter r = 6; // we are only addressing 64=2**6 mem slots in imem
-    logic [(n-1):0] readdata, writedata;
-    logic [(n-1):0] dmem_addr;
-    logic write_enable;
-    logic clk, clock_enable;
+module imem
+// n=bit length of register; r=bit length of addr to limit memory and not crash your verilog emulator
+    #(parameter n = 32, parameter r = 6)(
+    //
+    // ---------------- PORT DEFINITIONS ----------------
+    //
+    input  logic [(r-1):0] addr,
+    output logic [(n-1):0] readdata
+);
+    //
+    // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
+    //
+    logic [(n-1):0] RAM[0:(2**r-1)];   //64 lines because 5 bit
 
-   initial begin
-        $dumpfile("dmem.vcd");
-        $dumpvars(0, uut, uut1);
-        $monitor("time=%0t write_enable=%b dmem_addr=%h readdata=%h writedata=%h",
-            $realtime, write_enable, dmem_addr, readdata, writedata);
+  initial
+    begin
+      // read memory in hex format from file 
+        $readmemh("mips-simple_exe",RAM);
     end
 
-    initial begin
-        #10 clock_enable <= 1;
-        #20 writedata = #(n)'hFFFFFFFF;
-        #20 dmem_addr <= #(r)'b000000;
-        #20 write_enable <= 1;
-        #20 write_enable <= 0;
-        #20 dmem_addr <= #(r)'b000001;
-        #20 writedata = #(n)'h0000FFFF;
-        #20 write_enable <= 1;
-        #20 write_enable <= 0;
-        #20 dmem_addr <= #(r)'b000010;
-        #20 writedata = #(n)'h00000000;
-        #20 write_enable <= 1;
-        #20 write_enable <= 0;
-        #20 $finish;
-    end
+  assign readdata = RAM[addr]; // word aligned
 
-   dmem uut(
-        .clk(clk),
-        .write_enable(write_enable),
-        .addr(dmem_addr),
-        .writedata(writedata),
-        .readdata(readdata)
-    );
-    clock uut1(
-        .ENABLE(clock_enable),
-        .CLOCK(clk)
-    );
 endmodule
 
-`endif // TB_IMEM
+`endif // IMEM
