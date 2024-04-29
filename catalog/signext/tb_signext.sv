@@ -14,7 +14,7 @@
 `define TB_SIGNEXT
 
 `timescale 1ns/100ps
-`include "signext.sv"
+`include "../signext/signext.sv"
 
 module tb_sl2;
     parameter n = 32; // #bits for an operand
