@@ -16,13 +16,13 @@
 
 `timescale 1ns/100ps
 
-`include "regfile.sv"
-`include "alu.sv"
-`include "dff.sv"
-`include "adder.sv"
-`include "sl2.sv"
-`include "mux2.sv"
-`include "signext.sv"
+`include "../regfile/regfile.sv"
+`include "../alu/alu.sv"
+`include "../dff/dff.sv"
+`include "../adder/adder.sv"
+`include "../sl2/sl2.sv"
+`include "../mux2/mux2.sv"
+`include "../signext/signext.sv"
 
 module datapath
     #(parameter n = 32)(
