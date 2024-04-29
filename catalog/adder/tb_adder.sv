@@ -34,5 +34,6 @@ module tb_adder;
     adder uut(
         .A(a), .B(b), .Y(y)
     );
+    
 endmodule
 `endif // TB_ADDER
