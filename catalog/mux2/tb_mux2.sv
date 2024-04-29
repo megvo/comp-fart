@@ -14,7 +14,7 @@
 `define TB_MUX2
 
 `timescale 1ns/100ps
-`include "mux2.sv"
+`include "../mux2/mux2.sv"
 `include "../clock/clock.sv"
 
 module tb_mux4;
