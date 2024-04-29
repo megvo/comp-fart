@@ -11,7 +11,7 @@
 //                                                                              //
 //////////////////////////////////////////////////////////////////////////////////
 `timescale 1ns/100ps
-`include "controller.sv"
+`include "../controller/controller.sv"
 
 module controller_tb;
     reg [5:0] op, funct;
