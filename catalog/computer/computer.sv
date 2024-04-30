@@ -25,13 +25,13 @@ module computer
     // ---------------- PORT DEFINITIONS ----------------
     //
     input  logic           clk, reset, 
-    output logic [(n-1):0] writedata, dataadr, 
+        output logic [15:0] writedata, dataadr, 
     output logic           memwrite
 );
     //
     // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
     //
-    logic [(n-1):0] pc, instr, readdata;
+    logic [15:0] pc, instr, readdata;
 
     // computer internal components
 
