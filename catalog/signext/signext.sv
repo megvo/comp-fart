@@ -10,23 +10,20 @@
 // Revision: 1.0
 //
 //////////////////////////////////////////////////////////////////////////////////
+
 `ifndef SIGNEXT
 `define SIGNEXT
-
 `timescale 1ns/100ps
 
-module signext
-    #(parameter n = 32, i = 16)(
-    //
-    // ---------------- PORT DEFINITIONS ----------------
-    //
-    input  logic [(i-1):0] A,
-    output logic [(n-1):0] Y
-);
-    //
-    // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
-    //
-    assign Y = { {n{A[(i-1)]}}, A}; // sign extend (i-1)th bit i bits to the left.
+module signext (
+    input logic [3:0] in,
+    output logic [15:0] out
+    );
+
+    always @* begin
+        out <= {{12{in[3]}}, in};
+    end
+
 endmodule
 
 `endif // SIGNEXT
