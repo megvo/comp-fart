@@ -22,7 +22,7 @@ module imem (
     logic [15:0] MEMORY [31:0];
 
     initial begin
-        $readmemh("imem-datafile.dat", MEMORY, 0, 16);
+        $readmemh("imem_datafile.dat", MEMORY, 0, 16);
     end
 
     assign instruction = MEMORY[address];
