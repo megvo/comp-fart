@@ -12,38 +12,25 @@
 //////////////////////////////////////////////////////////////////////////////////
 `ifndef REGFILE
 `define REGFILE
-
 `timescale 1ns/100ps
 
-module regfile
-    // n=bit length of register; r=bit length of addr of registers
-    #(parameter n = 32, parameter r = 5)(
-    //
-    // ---------------- PORT DEFINITIONS ----------------
-    //
-    input  logic        clk, 
-    input  logic        we3, 
-    input  logic [(r-1):0]  ra1, ra2, wa3, 
-    input  logic [(n-1):0] wd3, 
-    output logic [(n-1):0] rd1, rd2
+module regfile (
+    input logic [3:0] readAddr1, readAddr2, writeAddr,
+    input logic [15:0] writeData,
+    input logic regWrite, clk,
+    output logic [15:0] readData1, readData2
     );
-    //
-    // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
-    //
-    logic [(n-1):0] rf[(2**5-1):0];
 
-    // three ported register file
-    // read two ports combinationally
-    // write third port on rising edge of clk
-    // register 0 hardwired to 0
-    // note: for pipelined processor, write third port
-    // on falling edge of clk
+    reg [15:0] rFile [15:0];
+    assign readData1 = rFile[readAddr1];
+    assign readData2 = rFile[readAddr2];
 
-    always @(posedge clk)
-        if (we3) rf[wa3] <= wd3;	
+    always begin
+        rFile[0] <= 0; // 0 address is hardwired to 0
+        @(posedge clk) if (regWrite && writeAddr != 0) rFile[writeAddr] <= writeData;
+    end
 
-    assign rd1 = (ra1 != 0) ? rf[ra1] : 0;
-    assign rd2 = (ra2 != 0) ? rf[ra2] : 0;
+
 endmodule
 
 `endif // REGFILE
