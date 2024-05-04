@@ -10,45 +10,65 @@
 // Revision: 1.0                                                                //
 //                                                                              //
 //////////////////////////////////////////////////////////////////////////////////
-`ifndef TB_ADDER
-`define TB_ADDER
-
 `timescale 1ns/100ps
 
-module tb_adder;
+`include "./adder.sv"
 
-    parameter WIDTH = 32;  // Parameter for the width of the adder
-    reg [WIDTH-1:0] A, B;  // Inputs are reg for the testbench
-    wire [WIDTH-1:0] Y;  // Output Y is wire for the testbench
-    
+module adder_tb();
+    logic [15:0] a;
+    logic [15:0] b;
+    logic [15:0] result;
 
-    // UUT
-    adder #(.WIDTH(WIDTH)) uut(
-        .A(A), 
-        .B(B),  
-        .Y(Y)
+    reg clk, reset; //reset for initializing testvectors
+
+    logic [47:0] testvectors[0:1000];
+    integer vectornum, errors;
+    logic [15:0] expectedResult;
+
+
+    adder uut (
+             .a(a),
+             .b(b),
+             .result(result)
     );
 
-    // Initialize testbench
-    initial begin
-        $dumpfile("tb_adder.vcd"); 
-        $dumpvars(0, uut);         
-        
-        // Apply random inputs
-        A = $random; B = $random; #10;
-        A = $random; B = $random; #10;
-        A = $random; B = $random; #10;
-        A = $random; B = $random; #10;
-
-        
-        $finish;
+    always begin
+        clk = 1;
+        #5;
+        clk = 0;
+        #5;
     end
 
-    // Monitoring
     initial begin
-        $monitor("Time = %0t: A = %b, B = %b, Y = %b ",
-                  $time, A, B, Y);
+        $dumpfile("tb_adder.vcd");
+        $dumpvars(0, uut);
+        
+        testvectors[0] = {16'hFFFF, 16'h0000, 16'hFFFF};
+        vectornum = 0;
+        errors = 0;
+        reset = 1; #27; reset = 0;
     end
+
+    always @(posedge clk) begin
+        #1; 
+        {a, b, expectedResult} = testvectors[vectornum];
+    end
+
+    always @(negedge clk) begin
+        #1;
+        if (~reset) begin
+            if (result !== expectedResult) begin
+                $display("Error:\tinputs: a = %h, b=%h", a, b);
+                $display("\tresult = %h, expectedResult = %h", result, expectedResult);
+                errors = errors + 1;
+            end
+            vectornum = vectornum + 1;
+            if (testvectors[vectornum] === 48'hx) begin
+                $display("%d tests completed with %d errors", vectornum, errors);
+                $finish;
+            end
+        end
+    end
+
 
 endmodule
-`endif 
