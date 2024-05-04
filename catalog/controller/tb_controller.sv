@@ -11,68 +11,89 @@
 //                                                                              //
 //////////////////////////////////////////////////////////////////////////////////
 `timescale 1ns/100ps
-`include "../controller/controller.sv"
 
-module controller_tb;
-    reg [5:0] op, funct;
-    reg zero;
+`include "./controller.sv"
 
-    wire memwrite;
-    wire pcsrc, alusrc;
-    wire regwrite;
-    wire [1:0] jump, regdst, memtoreg;
-    wire [2:0] alucontrol;
+module tb_controller();
+    logic [3:0] op;
+    logic [2:0] aluCtrl;
+    logic [1:0] regDst, memToReg, jump, aluSrc;
+    logic regWrite, memWrite, pcSrc, zero;
 
-    // Instantiate Controller module
-    controller #(.n(32)) dut (
-        .op(op),
-        .funct(funct),
-        .zero(zero),
-        .memtoreg(memtoreg),
-        .memwrite(memwrite),
-        .pcsrc(pcsrc),
-        .alusrc(alusrc),
-        .regdst(regdst),
-        .regwrite(regwrite),
-        .jump(jump),
-        .alucontrol(alucontrol)
+    logic [13:0] control;
+
+    reg clk, reset; //reset for initializing testvectors
+
+    logic [63:0] testvectors[0:1000];
+    integer vectornum, errors;
+
+    //expected
+    logic [13:0] expectedControl;
+
+    controller uut (
+             .op(op),
+             .zero(zero),
+             .regWrite(regWrite),
+             .regDst(regDst),
+             .memWrite(memWrite),
+             .memToReg(memToReg),
+             .jump(jump),
+             .aluSrc(aluSrc),
+             .pcSrc(pcSrc),
+             .aluCtrl(aluCtrl)
     );
-    
-    initial begin
-        op = 6'b000000;
-        funct = 6'b000000;
-        zero = 0;
 
-        #10;
-
-        // Case 1: Test case description
-        op = 6'b001000;
-        funct = 6'b000010;
-        zero = 1;
-        #10;
-        $display("regwrite = %b", regwrite);
-        $display("regdst = %b", regdst);
-        $display("alusrc = %b", alusrc);
-        $display("branch = %b", pcsrc);
-        $display("memwrite = %b", memwrite);
-        $display("memtoreg = %b", memtoreg);
-        $display("jump = %b", jump);
-        $display("alucontrol = %b", alucontrol);
-
-        // Case 2: Test case description
-        op = 6'b000000;
-        funct = 6'b000100;
-        zero= 1;
-        #10;
-        $display("regwrite = %b", regwrite);
-        $display("regdst = %b", regdst);
-        $display("alusrc = %b", alusrc);
-        $display("branch = %b", pcsrc);
-        $display("memwrite = %b", memwrite);
-        $display("memtoreg = %b", memtoreg);
-        $display("jump = %b", jump);
-        $display("alucontrol = %b", alucontrol);
-    
-        #100 $finish;
+    always begin
+        clk = 1;
+        #5;
+        clk = 0;
+        #5;
     end
+
+
+    initial begin
+    $dumpfile("tb_controller.vcd");
+    $dumpvars(0, uut);
+    
+    
+    testvectors[0] = {4'b0000, 1'b0, 14'b10100000000010}; // Adjust the value according to your needs
+    
+    vectornum = 0; 
+    errors = 0;
+    reset = 1; #27; reset = 0;
+    $display("control = {regWrite,regDst,memWrite,memToReg,jump,aluSrc,pcSrc} {aluCtrl}");
+end
+
+    always @(negedge clk) begin
+        #1;  
+        {op, zero, expectedControl} = testvectors[vectornum];
+    end
+
+    always @(posedge clk) begin
+        #1;
+        if (~reset) begin
+            control = {
+                regWrite,
+                regDst,
+                memWrite,
+                memToReg,
+                jump,
+                aluSrc,
+                pcSrc,
+                aluCtrl
+                };
+            if (control !== expectedControl) begin
+                $display("Error:\tinputs: op = %h, zero = %b", op, zero);
+                $display("\tcontrol = %b %b, expectedControl = %b %b", control[9:3], control[2:0], expectedControl[9:3], expectedControl[2:0]);
+                errors = errors + 1;
+            end
+            vectornum = vectornum + 1;
+            if (testvectors[vectornum] === 64'hx) begin
+                $display("%d tests completed with %d errors", vectornum, errors);
+                $finish;
+            end
+        end
+    end
+
+
 endmodule
