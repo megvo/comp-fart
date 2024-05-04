@@ -4,7 +4,7 @@
 // Engineer: Megan Vo and Lamiah Khan                                           //
 //                                                                              //
 //     Create Date: 2024-04-27                                                  //
-//     Module Name: tb_cpu                                                         //
+//     Module Name: tb_cpu                                                       //
 //     Description: Testbench for a 32-bit RISC-based CPU (MIPS)                //
 //                                                                              //
 //                                                                              //
@@ -12,66 +12,72 @@
 //////////////////////////////////////////////////////////////////////////////////
 `timescale 1ns/100ps
 
-module tb_cpu;
+`include "./cpu.sv"
 
-    // Parameters
-    parameter n = 32;
+module tb_cpu();
+    logic rst;
+    logic [15:0] instruction, readData;
 
-    logic clk = 0;
-    logic reset = 0;
-    logic [(n-1):0] instr = 0;
-    logic [(n-1):0] readdata = 0;
+    logic memWrite;
+    logic [15:0] aluResult, memWriteData, pc;
 
-    logic [(n-1):0] pc;
-    logic memwrite;
-    logic [(n-1):0] aluout, writedata;
+    reg clk, reset; //reset for initializing testvectors
 
+    logic [87:0] testvectors[0:1000];
+    integer vectornum, errors;
 
-    cpu dut (
-        .clk(clk),
-        .reset(reset),
-        .pc(pc),
-        .instr(instr),
-        .memwrite(memwrite),
-        .aluout(aluout),
-        .writedata(writedata),
-        .readdata(readdata)
+    //expected
+    logic expectedMemWrite;
+    logic [15:0] expectedAluResult, expectedMemWriteData, expectedPc;
+
+    cpu uut (
+             .clk(clk),
+             .rst(rst),
+             .instruction(instruction),
+             .readData(readData),
+             .memWrite(memWrite),
+             .aluResult(aluResult),
+             .memWriteData(memWriteData),
+             .pc(pc)
     );
 
-    always #5 clk = ~clk;
+    always begin
+        clk = 1;
+        #5;
+        clk = 0;
+        #5;
+    end
 
-initial begin 
-clk=0;
-reset=1;
-#10;
-reset=0;
-//zero=0;
-readdata = 32'hdeadbeef;
-instr = 32'h050C0004; 
-#10;
-$display("PC = %h", pc);
-        $display("ALUOut = %h", aluout);
-        $display("WriteData = %h", writedata);
-        $display("MemWrite = %d", memwrite);
-instr =  32'h0C0D000F;  
-#10;
-$display("PC = %h", pc);
-        $display("ALUOut = %h", aluout);
-        $display("WriteData = %h", writedata);
-        $display("MemWrite = %d", memwrite);
-instr = 32'b00001001100000100000000000000100;  
-#10
- $display("PC = %h", pc);
-        $display("ALUOut = %h", aluout);
-        $display("WriteData = %h", writedata);
-        $display("MemWrite = %d", memwrite);
- instr= 32'b00000101100000110000000000000100;
- #10;
- $display("PC = %h", pc);
-        $display("ALUOut = %h", aluout);
-        $display("WriteData = %h", writedata);
-        $display("MemWrite = %d", memwrite);
-$finish;
-end
+    initial begin
+        $dumpfile("tb_cpu.vcd");
+        $dumpvars(0, uut);
+        testvectors[0] = {1'b0, 16'ha443, 16'h0000, 1'b0, 16'h000a, 16'h0007, 16'h0004};
+        vectornum = 0;
+        errors = 0;
+        reset = 1; #27; reset = 0;
+    end
+
+    always @(posedge clk) begin
+        {rst, instruction, readData, expectedMemWrite, expectedAluResult, expectedMemWriteData, expectedPc} = testvectors[vectornum];
+    end
+
+    always @(negedge clk) begin
+        if (~reset) begin
+            if ({memWrite, aluResult, memWriteData, pc} !== {expectedMemWrite, expectedAluResult, expectedMemWriteData, expectedPc}) begin
+                $display("Error:\tinputs: {rst, instruction, readData} = %b %b %b", rst, instruction, readData);
+                $display("\tmemWrite= %h, expectedMemWrite = %h", memWrite, expectedMemWrite);
+                $display("\taluResult = %h, expectedAluResult = %h", aluResult, expectedAluResult);
+                $display("\tmemWriteData = %h, expectedMemWriteData = %h", memWriteData, expectedMemWriteData);
+                $display("\tpc = %h, expectedPc = %h", pc, expectedPc);
+                errors = errors + 1;
+            end
+            vectornum = vectornum + 1;
+            if (testvectors[vectornum] === 88'hx) begin
+                $display("%d tests completed with %d errors", vectornum, errors);
+                $finish;
+            end
+        end
+    end
+
 
 endmodule
