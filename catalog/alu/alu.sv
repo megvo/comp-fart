@@ -13,57 +13,42 @@
 `ifndef ALU
 `define ALU
 
-`timescale 1ns/100ps
+module alu (
+    input logic [15:0] a, b,
+    input logic [2:0] ctrl,
+    output logic [15:0] result,
+    output logic zero
+    );
+    
+    // Define control signals directly in the module
+    `define ALU_CTRL_AND 3'b000
+    `define ALU_CTRL_OR  3'b001
+    `define ALU_CTRL_ADD 3'b010
+    `define ALU_CTRL_SLL 3'b011
+    `define ALU_CTRL_NOR 3'b100
+    `define ALU_CTRL_SRL 3'b101
+    `define ALU_CTRL_SUB 3'b110
+    `define ALU_CTRL_SLT 3'b111
+    
+    assign zero = (result == 0);
 
-module alu #(
-    parameter n = 32
-)(
-    input  logic        clock,
-    input  logic [n-1:0] a,
-    input  logic [n-1:0] b,
-    input  logic [2:0]  alucontrol,
-    output logic [n-1:0] result,
-    output logic        zero
-);
-    logic [n-1:0] condinvb, sum;
-    logic [(2*n-1):0] HiLo;
-
-    assign zero = (result == {n{1'b0}});
-    assign condinvb = alucontrol[2] ? ~b : b;
-    assign sumSlt = a + condinvb + alucontrol[2];
-
-    initial
-        begin
-            HiLo = 64'b0;
-        end
-
-    always @(a, b, alucontrol) begin
-        case (alucontrol)
-            3'b000: result = a & b;
-            3'b001: result = a | b;
-            3'b010: result = a + b;
-            3'b011: result = ~(a | b);
-            3'b110: result = a - b;
-            3'b111: begin
-                 if (a[31] != b[31])
-                     if (a > b )
-                         result = 1;
-                     else
-                         result = 0;
-                 else
-                     if (a < b)
-                         result = 1;
-                     else
-                         result = 0;
-                 
+    always @(a or b or ctrl) begin
+        case (ctrl)
+            `ALU_CTRL_AND: result <= a & b;     //and
+            `ALU_CTRL_OR : result <= a | b;     //or
+            `ALU_CTRL_ADD: result <= a + b;     //add
+            `ALU_CTRL_SLL: result <= a << b;    //sll
+            `ALU_CTRL_NOR: result <= ~(a | b);  //nor
+            `ALU_CTRL_SRL: result <= a >> b;    //srl
+            `ALU_CTRL_SUB: result <= a - b;     //sub
+            `ALU_CTRL_SLT: begin                //slt
+                if (a[15] != b[15])
+                    result <= (a[15] > b[15]);
+                else
+                    result <= (a < b);
             end
+            default: result <= 0;
         endcase
-    end
-
-    always @(negedge clock) begin
-        case (alucontrol)
-            3'b011: HiLo = a * b;
-        endcase				
     end
 
 endmodule
