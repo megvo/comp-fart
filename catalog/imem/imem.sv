@@ -12,30 +12,20 @@
 //////////////////////////////////////////////////////////////////////////////////
 `ifndef IMEM
 `define IMEM
-
 `timescale 1ns/100ps
 
-module imem
-// n=bit length of register; r=bit length of addr to limit memory and not crash your verilog emulator
-    #(parameter n = 32, parameter r = 6)(
-    //
-    // ---------------- PORT DEFINITIONS ----------------
-    //
-    input  logic [(r-1):0] addr,
-    output logic [(n-1):0] readdata
-);
-    //
-    // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
-    //
-    logic [(n-1):0] RAM[0:(2**r-1)];   //64 lines because 5 bit
+module imem (
+    input logic [4:0] address,
+    output logic [15:0] instruction
+    );
 
-  initial
-    begin
-      // read memory in hex format from file 
-        $readmemh("mips-simple_exe",RAM);
+    logic [15:0] MEMORY [31:0];
+
+    initial begin
+        $readmemh("imem-datafile.dat", MEMORY, 0, 16);
     end
 
-  assign readdata = RAM[addr]; // word aligned
+    assign instruction = MEMORY[address];
 
 endmodule
 
