@@ -13,32 +13,21 @@
 
 `ifndef DFF
 `define DFF
-
 `timescale 1ns/100ps
 
-module dff
-    #(parameter n = 32)(
-    //
-    // ---------------- PORT DEFINITIONS ----------------
-    //
-    input  logic CLOCK, RESET,
-    input  logic [(n-1):0] D,
-    output logic [(n-1):0] Q
-);
-    //
-    // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
-    //
-    always @(posedge CLOCK, posedge RESET)
-    begin
-        if (RESET)
-        begin
-            Q <= 0;
-        end
+module dff (
+    input logic rst, clk,
+    input logic [15:0] d,
+    output reg [15:0] q
+    );
+
+    always @(posedge clk, posedge rst) begin
+        if (rst)
+            q <= 15'b0;
         else
-        begin
-            Q <= D;
-        end
+            q <= d;
     end
+
 endmodule
 
 `endif // DFF
