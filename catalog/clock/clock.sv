@@ -12,42 +12,32 @@
 //////////////////////////////////////////////////////////////////////////////////
 `ifndef CLOCK
 `define CLOCK
-
 `timescale 1ns/100ps
 
-module clock #(
-    parameter ticks = 10
-)(
-    //
-    // --------------- PORT DEFINITIONS ---------------
-    //
+module clock (
     input ENABLE,
     output reg CLOCK
-);
-    //
-    // --------------- MODULE DESIGN IMPLEMENTATION ---------------
-    //
-    reg start_clock;
-    real clock_on = ticks / 2; // Duty cycle = 50%
-    real clock_off = ticks / 2;
+    );
 
-    // Initialize variables
+    reg start_clock;
+    real clock_on = 5;
+    real clock_off = 5;
+
     initial begin
-        CLOCK = 0;
-        start_clock = 0;
+        CLOCK <= 0;
+        start_clock <= 0;
     end
 
     always @(posedge ENABLE or negedge ENABLE) begin
         if (ENABLE) begin
-            start_clock <= 1;
+            start_clock = 1;
         end
         else begin
-            start_clock <= 0;
+            start_clock = 0;
         end
-        // #ticks CLOCK = ~CLOCK;
     end
 
-    always @ (start_clock) begin
+    always @(start_clock) begin
         CLOCK = 0;
         while (start_clock) begin
             #(clock_off) CLOCK = 1;
@@ -57,5 +47,6 @@ module clock #(
     end
 endmodule
 
-`endif // CUSTOM_CLOCK
+`endif // CLOCK
+
 
