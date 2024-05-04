@@ -10,36 +10,65 @@
 // Revision: 1.0
 //
 //////////////////////////////////////////////////////////////////////////////////
-`ifndef TB_IMEM
-`define TB_IMEM
 
 `timescale 1ns/100ps
-`include "../imem/imem.sv"
 
-module tb_imem;
-    parameter n = 32; // bit length of registers/memory
-    parameter r = 6; // we are only addressing 64=2**6 mem slots in imem
-    logic [(n-1):0] readdata;
-    logic [(r-1):0] imem_addr;
+`include "./imem.sv"
 
-   initial begin
-        $dumpfile("imem.vcd");
-        $dumpvars(0, uut);
-        //$monitor("enable = %b clk = %b", enable, clk);
-        $monitor("time=%0t \t imem_addr=%b readdata=%h",$realtime, imem_addr, readdata);
+module imem_tb();
+    logic [4:0] address;
+    logic [15:0] instruction;
+
+    reg clk, reset; //reset for initializing testvectors
+
+    logic [23:0] testvectors[0:1000];
+    integer vectornum, errors;
+    logic [15:0] expectedInstruction;
+
+
+    imem uut (
+             .address(address),
+             .instruction(instruction)
+    );
+
+    always begin
+        clk = 1;
+        #5;
+        clk = 0;
+        #5;
     end
 
     initial begin
-        #10 imem_addr <= #(r)'b000000;
-        #10 imem_addr <= #(r)'b000001;
-        #10 imem_addr <= #(r)'b000010;
-        $finish;
+        $dumpfile("tb_imem.vcd");
+        $dumpvars(0, uut);
+    
+        testvectors[0] = {8'h02, 16'h0002};
+        vectornum = 0;
+        errors = 0;
+        reset = 1; #27; reset = 0;
     end
 
-   imem uut(
-        .addr(imem_addr),
-        .readdata(readdata)
-    );
-endmodule
+    always @(posedge clk) begin
+        #1; 
+        {address, expectedInstruction} = testvectors[vectornum];
+        
+    end
 
-`endif // TB_IMEM
+    always @(negedge clk) begin
+        #1;
+        if (~reset) begin
+            if (instruction !== expectedInstruction) begin
+                $display("Error:\tinputs: address = %h", address);
+                $display("\tinstruction = %h, expectedInstruction = %h", instruction, expectedInstruction);
+                errors = errors + 1;
+            end
+            vectornum = vectornum + 1;
+            if (testvectors[vectornum] === 24'hx) begin
+                $display("%d tests completed with %d errors", vectornum, errors);
+                $finish;
+            end
+        end
+    end
+
+
+endmodule
