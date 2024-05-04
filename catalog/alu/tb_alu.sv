@@ -10,61 +10,64 @@
 //                                                                              //
 //                                                                              //
 //////////////////////////////////////////////////////////////////////////////////
-
-
-`include "../alu/alu.sv"
 `timescale 1ns/100ps
 
 module alu_tb();
+    logic [15:0] a, b;
+    logic [2:0] ctrl;
+    logic [15:0] result;
+    logic zero;
 
-  reg clk;
-  reg [31:0] a, b;
-  reg [2:0] alucontrol;
+    reg clk, reset;
 
-  wire [31:0] result;
-  wire zero;
+    // Define test vectors directly within the testbench
+    logic [55:0] testvectors[0:32];
+    logic [15:0] vectornum, errors;
+    logic [15:0] expectedResult;
+    logic expectedZero;
 
-  alu dut (
-    .clk(clk),
-    .a(a),
-    .b(b),
-    .alucontrol(alucontrol),
-    .result(result),
-    .zero(zero)
-  );
+    alu uut (
+        .a(a),
+        .b(b),
+        .ctrl(ctrl),
+        .result(result),
+        .zero(zero)
+    );
 
-  initial begin
-    clk = 0;
-    a = 32'h00000000;
-    b = 32'h00000000;
-    alucontrol = 3'b000;
-  end
+    always begin
+        clk = 1;
+        #5;
+        clk = 0;
+        #5;
+    end
 
-  always #5 clk = ~clk;
+    initial begin
+        $dumpfile("tb_alu.vcd");
+        $dumpvars(0, uut);
+        
+        testvectors[0]  = {3'b010, 16'h0000, 16'h0000, 16'h0000, 1'b1};
+        vectornum = 0;
+        errors = 0;
+        reset = 1; #27; reset = 0;
+    end
 
-  initial begin
-    #100;
-    a = 32'h0000000B;
-    b = 32'h0000000B;
-    alucontrol = 3'b111;
-    #10;
-    $display("Result = %h", result);
-    $display("zero = %h", zero);
-    #10; 
-    a = 32'h0000000B;
-    b = 32'h0000000A;
-    alucontrol = 3'b111;
-    #10;
-    $display("Result = %h", result);
-    $display("zero = %h", zero);
-    #10;
-    a = 32'h0000000A;
-    b = 32'h0000000B;
-    alucontrol = 3'b110;
-    #10;
-    $display("Result = %h", result);
-    $display("zero = %h", zero);
-    #100 $finish;
-  end
+    always @(posedge clk) begin
+        #1; // Load test vector
+        {ctrl, a, b, expectedResult, expectedZero} = testvectors[vectornum];
+    end
+
+    always @(negedge clk) begin
+        if (~reset) begin
+            if ({result, zero} !== {expectedResult, expectedZero}) begin
+                $display("Error:\tinputs: ctrl = %h, a = %h, b = %h", ctrl, a , b);
+                $display("\tresult = %h, zero = %b\n\texpectedResult = %h, expectedZero = %h", result, zero, expectedResult, expectedZero);
+                errors = errors + 1;
+            end
+            vectornum = vectornum + 1;
+            if (testvectors[vectornum] === 56'hx) begin
+                $display("%d tests completed with %d errors", vectornum, errors);
+                $finish;
+            end
+        end
+    end
 endmodule
-
