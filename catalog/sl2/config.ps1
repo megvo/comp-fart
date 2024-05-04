@@ -5,7 +5,7 @@
  # Note: icarus verilog and gtkwave must be installed
  #>
 
- $COMPONENT = "sl2"
+ $COMPONENT = "sl1"
  #
  $SRC = "$COMPONENT.sv"
  $TESTBENCH = "tb_$COMPONENT.sv"
