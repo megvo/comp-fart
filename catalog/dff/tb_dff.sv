@@ -10,48 +10,67 @@
 // Revision: 1.0
 //
 //////////////////////////////////////////////////////////////////////////////////
-`ifndef TB_DFF
-`define TB_DFF
-
 `timescale 1ns/100ps
-`include "../dff/dff.sv"
-`include "../clock/clock.sv"
 
-module tb_dff;
-    parameter n = 32; // #bits for an operand
-    wire clk;
-    logic enable;
-    logic reset;
-    logic [(n-1):0] d;
-    logic [(n-1):0] q;
+`include "./dff.sv"
 
-   initial begin
-        $dumpfile("dff.vcd");
-        $dumpvars(0, uut0, uut1);
-        //$monitor("d = %b (0x%0h)(%0d) q = %b (0x%0h)(%0d) ", d,d,d,q,q,q);
-        $monitor("time=%0t \t d=%h q=%h",$realtime, d, q);
+module tb_dff();
+    logic [15:0] d;
+    logic [15:0] q;
+    logic rst; //rst for dff
+
+    reg clk, reset; //reset for initializing testvectors
+
+    logic [32:0] testvectors[0:1000];
+    logic [32:0] tmp;
+    integer vectornum, errors;
+    logic [15:0] expectedQ;
+
+
+    dff uut (
+             .rst(rst),
+             .clk(clk),
+             .d(d),
+             .q(q)
+    );
+
+    always begin
+        clk = 1;
+        #5;
+        clk = 0;
+        #5;
     end
 
     initial begin
-        d <= #n'h8000;
-        enable <= 0;
-        #10 enable <= 1;
-        #10 reset <= 1;
-        #20 d <= #n'h0001;
-        #10 reset <= 0;
-        #10 reset <=0;
-        #20 d <= #n'h0001;
-        #100 enable <= 0;
-        $finish;        
+        $dumpfile("tb_dff.vcd");
+        $dumpvars(0, uut);
+
+        testvectors[0] = {1'b0, 16'h0000, 16'h0000};
+        vectornum = 0;
+        errors = 0;
+        reset = 1; #27; reset = 0;
     end
 
-    dff uut0(
-        .CLOCK(clk), .RESET(reset), .D(d), .Q(q)
-    );
+    always @(negedge clk) begin
+        #1; 
+        {rst, d, expectedQ} = testvectors[vectornum];
+    end
 
-   clock uut1(
-        .ENABLE(enable),
-        .CLOCK(clk)
-    );
+    always @(posedge clk) begin
+        #1;
+        if (~reset) begin
+            if (q !== expectedQ) begin
+                $display("Error:\tinputs: rst = %b, d = %h", rst, d);
+                $display("\tq = %h, expectedQ = %h", q, expectedQ);
+                errors = errors + 1;
+            end
+            vectornum = vectornum + 1;
+            if (testvectors[vectornum] === 33'hx) begin
+                $display("%d tests completed with %d errors", vectornum, errors);
+                $finish;
+            end
+        end
+    end
+
+
 endmodule
-`endif // TB_DFF
